@@ -3,6 +3,7 @@ package controllers
 import (
 	"encoding/json"
 	"go-mvc/src/services"
+	"go-mvc/src/utils"
 	"net/http"
 	"strconv"
 )
@@ -12,16 +13,23 @@ func GetUser(resp http.ResponseWriter, req *http.Request) {
 	userId, err := strconv.ParseInt(req.URL.Query().Get("user_id"), 10, 64)
 
 	if err != nil {
-		resp.WriteHeader(http.StatusBadRequest)
-		resp.Write([]byte("UserId must be a number"))
+		apiErr := &utils.ApplicationError{
+			Message:    "UserId must be a number",
+			StatusCode: http.StatusBadRequest,
+			Code:       "bad_request",
+		}
+		resp.WriteHeader(apiErr.StatusCode)
+		userErrJson, _ := json.Marshal(apiErr)
+		resp.Write(userErrJson)
 		return
 	}
 
-	user, err := services.GetUser(userId)
+	user, apiErr := services.GetUser(userId)
 
-	if err != nil {
-		resp.WriteHeader(http.StatusNotFound)
-		resp.Write([]byte(err.Error()))
+	if apiErr != nil {
+		userErrJson, _ := json.Marshal(apiErr)
+		resp.WriteHeader(apiErr.StatusCode)
+		resp.Write([]byte(userErrJson))
 		return
 	}
 

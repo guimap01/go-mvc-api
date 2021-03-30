@@ -12,7 +12,7 @@ var (
 			Id:        123,
 			FirstName: "Pedro",
 			LastName:  "Guimaraes",
-			Email:     "pedro@gmail.com",
+			Email:     "pedromonteirogui@gmail.com",
 		},
 	}
 )

@@ -5,6 +5,12 @@ import (
 	"go-mvc/src/utils"
 )
 
-func GetUser(userId int64) (*domain.User, *utils.ApplicationError) {
-	return domain.GetUser(userId)
+type userService struct{}
+
+var (
+	UserService userService
+)
+
+func (s *userService) GetUser(userId int64) (*domain.User, *utils.ApplicationError) {
+	return domain.UserDao.GetUser(userId)
 }
